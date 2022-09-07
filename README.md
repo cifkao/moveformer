@@ -17,3 +17,9 @@ Then run the notebooks in [`data/`](./data) in the following order:
 - [`movebank+ungulates/merge.ipynb`](./data/movebank%2Bungulates/merge.ipynb) merges the data from the two sources.
 - [`movebank+ungulates/sample_12h.ipynb`](./data/movebank%2Bungulates/sample_12h.ipynb) subsamples the data with a period of approximately 12 h (noon, midnight).
 - [`geo/worldclim.ipynb`](./data/geo/worldclim.ipynb) processes the WorldClim bioclimatic variables.
+
+## Estimating step samplers
+
+## Training the model
+
+## Running the model
