@@ -16,4 +16,4 @@ Then run the notebooks in [`data/`](./data) in the following order:
 - [`movebank/individual_vars.ipynb`](./data/movebank/individual_vars.ipynb) and [`ungulates/individual_vars.ipynb`](./data/ungulates/individual_vars.ipynb) create a mapping from individuals to Wikipedia2Vec taxon embeddings.
 - [`movebank+ungulates/merge.ipynb`](./data/movebank%2Bungulates/merge.ipynb) merges the data from the two sources.
 - [`movebank+ungulates/sample_12h.ipynb`](./data/movebank%2Bungulates/sample_12h.ipynb) subsamples the data with a period of approximately 12 h (noon, midnight).
-- [`worldclim.ipynb`](./data/worldclim.ipynb) processes the WorldClim bioclimatic variables.
+- [`geo/worldclim.ipynb`](./data/geo/worldclim.ipynb) processes the WorldClim bioclimatic variables.
