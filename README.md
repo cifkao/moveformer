@@ -1,5 +1,9 @@
 # MoveFormer
 
+## Code
+
+The main code is found in the [`geo_transformers`](./geo_transformers) Python package. (TODO: copy the code here, describe how to install the package)
+
 ## Downloading and preparing the data
 
 First, download the following data:
