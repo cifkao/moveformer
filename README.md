@@ -18,7 +18,11 @@ Then run the notebooks in [`data/`](./data) in the following order:
 - [`movebank+ungulates/sample_12h.ipynb`](./data/movebank%2Bungulates/sample_12h.ipynb) subsamples the data with a period of approximately 12 h (noon, midnight).
 - [`geo/worldclim.ipynb`](./data/geo/worldclim.ipynb) processes the WorldClim bioclimatic variables.
 
-## Estimating step samplers
+## Candidate samplers
+
+[`sandbox/movebank+ungulates_12h_id2sampler.pickle`](./sandbox/movebank+ungulates_12h_id2sampler.pickle) contains a mapping from sequence IDs to `StepSampler` instances, which serve to sample candidate locations.
+
+To re-estimate the samplers, run the [`sandbox/movebank+ungulates_12h_stats.ipynb`](./sandbox/movebank+ungulates_12h_stats.ipynb) notebook. It estimates the distributions of turning angles and log-distances for each taxon in the data, creates the corresponding `StepSampler` objects, and saves them by sequence ID.
 
 ## Training the model
 
