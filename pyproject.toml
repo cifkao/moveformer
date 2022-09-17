@@ -1,0 +1,47 @@
+[tool.poetry]
+name = "geo-transformers"
+version = "0.1.0"
+description = ""
+authors = ["Ondřej Cífka <cifkao@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.11"
+torch = "^1.10.2"
+x-transformers = { git = "https://github.com/cifkao/x-transformers.git", branch = "patched", develop = true }
+entmax = { git = "https://github.com/cifkao/entmax.git", branch = "fix-setup" }
+pytorch-lightning = ">=1.6.0"
+pyarrow = "^7.0.0"
+bidict = "^0.21.4"
+numba = "^0.55.1"
+numpy = "^1.21.5"
+jsonargparse = {extras = ["signatures"], version = ">=4.9.0,<4.10"}
+wandb = "^0.12.11"
+rasterio = {version = "^1.2.10"}
+gps2var = { git = "https://github.com/cifkao/gps2var.git", branch = "main", develop = true }
+pandas = {version = "^1.4.1", optional = true}
+matplotlib = {version = "^3.5.1", optional = true}
+plotly = {version = "^5.6.0", optional = true}
+ipython = {version = "^8.1.1", optional = true}
+ipykernel = {version = "^6.9.1", optional = true}
+ipywidgets = {version = "^7.6.5", optional = true}
+nopdb = {version = "^0.2.0", optional = true}
+seaborn = {version = "^0.11.2", optional = true}
+nltk = {version = "^3.7", optional = true}
+typing-extensions = "^4.2.0"
+dask = {version = "^2022.6.1", optional = true}
+pandarallel = {version = "^1.6.1", optional = true}
+shapely = {version = "1.8.0", optional = true}
+Cartopy = {version = "^0.20.3", optional = true}
+beautifulsoup4 = {version = "^4.11.1", optional = true}
+scikit-learn = {version = "^1.1.2", optional = true}
+kaleido = {version = "0.2.1", optional = true}
+
+[tool.poetry.dev-dependencies]
+black = "^22.1.0"
+
+[tool.poetry.extras]
+notebook = ["ipython", "ipykernel", "ipywidgets", "matplotlib", "seaborn", "plotly", "pandas", "nopdb", "Cartopy", "nltk", "dask", "pandarallel", "beautifulsoup4", "scikit-learn", "kaleido"]
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "setuptools>=59.5.0"]
+build-backend = "poetry.core.masonry.api"
