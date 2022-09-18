@@ -2,6 +2,8 @@
 
 The repository contains the following:
 - `geo_transformers` – the main Python package
+- `config` – training configuration files
+- `exp` – where models live
 - `data` – data preparation Jupyter notebooks
 - `sandbox` – other Jupyter notebooks (mainly with results)
 
