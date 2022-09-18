@@ -2,9 +2,36 @@
 
 ## Installation
 
-Clone the repository and make sure you have Python 3.9 or later, and pip 21.2 or later (run `pip install --upgrade pip`) or Poetry. Then run (preferably inside a virtual environment):
-- `pip install -e .` or `poetry install` to install only the dependencies required for training.
-- `pip install -e '.[notebook]'` or `poetry install -E notebook` to install all dependencies (including those required to run data preparation and evaluation notebooks).
+First, install [GDAL](https://gdal.org/) according to the [instructions](https://gdal.org/download.html#binaries) appropriate for your system (e.g. `apt install gdal-bin libgdal-dev`, `conda install -c conda-forge gdal`, ...). Then proceed either with Pip or Poetry as follows.
+
+### Pip
+Make sure you have Python 3.9 and pip 21.2 or later (run `pip install --upgrade pip`). Then:
+- To install only the dependencies required for training, run:
+  ```bash
+  pip install -r requirements.txt
+  pip install -e .
+  ```
+- To install all dependencies (including those required to run data preparation and evaluation notebooks):
+  ```bash
+  pip install -r requirements-notebook.txt
+  pip install -e '.[notebook]'
+  ```
+
+### Poetry
+Install [Poetry](https://python-poetry.org/) 1.1.13 or later.
+
+Optionally (if you are not in a virtual environment or your Python version is different from 3.9) set up a virtual environment and activate it:
+```bash
+poetry env use python3.9
+poetry shell
+```
+Then run:
+```bash
+pip install -U pip 'setuptools==59.5.0'
+```
+Finally, run either:
+- `poetry install` to install only the dependencies required for training.
+- `poetry install -E notebook` to install all dependencies (including those required to run data preparation and evaluation notebooks).
 
 ## Downloading and preparing the data
 
