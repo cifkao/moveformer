@@ -25,7 +25,7 @@ Make sure you have Python 3.9, `pip>=21.2`, and `setuptools==59.5.0` (run `pip i
 ### Poetry
 Install [Poetry](https://python-poetry.org/) 1.1.13 or later.
 
-Optionally (if you are not in a virtual environment or your Python version is different from 3.9) set up a virtual environment and activate it:
+Optionally (if you are not in a virtual environment or your default Python version is different from 3.9) set up a virtual environment and activate it:
 ```bash
 poetry env use python3.9
 poetry shell
