@@ -1,8 +1,10 @@
 # MoveFormer
 
-## Code
+## Installation
 
-The main code is found in the [`geo_transformers`](./geo_transformers) Python package. (TODO: copy the code here, describe how to install the package)
+Clone the repository and make sure you have Python 3.9 or later, and pip 21.2 or later (run `pip install --upgrade pip`) or Poetry. Then run (preferably inside a virtual environment):
+- `pip install -e .` or `poetry install` to install only the dependencies required for training.
+- `pip install -e '.[notebook]'` or `poetry install -E notebook` to install all dependencies (including those required to run data preparation and evaluation notebooks).
 
 ## Downloading and preparing the data
 
