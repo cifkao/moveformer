@@ -4,10 +4,8 @@ import os
 import pickle
 from typing import Callable, Dict, Optional, Union
 
-import bidict
 import gps2var
 import pyarrow as pa
-import pyarrow.compute
 import pyarrow.parquet as pq
 import pytorch_lightning as pl
 import jsonargparse
@@ -41,57 +39,6 @@ def augment_trajectory(
 ) -> Trajectory:
     mask = rng.random(_traj_len(traj)) > drop_prob
     traj = {key: val[mask] for key, val in traj.items()}
-    return traj
-
-
-def quantize_trajectory(
-    traj: Trajectory, logdist_min, logdist_max, logdist_steps, bearing_steps
-) -> Trajectory:
-    logdist_scale = (logdist_max - logdist_min) / logdist_steps
-
-    @numba.njit
-    def _compute(location_lat, location_long):
-        location_lat_q = location_lat.copy()
-        location_long_q = location_long.copy()
-        bearing_enc = np.zeros(len(location_lat))
-        distance_enc = np.zeros(len(location_lat))
-
-        for j in range(len(location_lat) - 1):
-            cur_lat, cur_long = location_lat_q[j], location_long_q[j]
-            nxt_lat, nxt_long = location_lat[j + 1], location_long[j + 1]
-
-            # Compute and quantize distance
-            dist = gcs_to_distance(cur_lat, cur_long, nxt_lat, nxt_long)
-            logdist = np.maximum(np.log10(dist), logdist_min)
-            logdist_int = np.minimum(
-                np.int_((logdist - logdist_min) / logdist_scale), logdist_steps - 1
-            )
-            dist = 10 ** (logdist_int * logdist_scale + logdist_min)
-
-            # Compute and quantize bearing
-            bear = gcs_to_bearing(cur_lat, cur_long, nxt_lat, nxt_long)
-            bear_int = np.int_(bear / 360 * bearing_steps)
-            bear = bear_int / bearing_steps * 360
-
-            # Update the next data point according to quantized values
-            lat_new, long_new = apply_move(cur_lat, cur_long, bear, dist)
-            location_lat_q[j + 1] = lat_new
-            location_long_q[j + 1] = long_new
-
-            # Store the encoded values
-            bearing_enc[j] = bear_int
-            distance_enc[j] = logdist_int
-
-        return location_lat_q, location_long_q, bearing_enc, distance_enc
-
-    traj = dict(traj)  # shallow copy
-    (
-        traj["location_lat"],
-        traj["location_long"],
-        traj["bearing_enc"],
-        traj["distance_enc"],
-    ) = _compute(traj["location_lat"], traj["location_long"])
-
     return traj
 
 
@@ -296,64 +243,6 @@ class SimpleTrajectoryProcessor(DataProcessor):
                     encoded[key + suf] = encoded[key + suf].astype(np.float32)
                 elif encoded[key + suf].dtype.kind in "iu":
                     encoded[key + suf] = encoded[key + suf].astype(np.int64)
-        return encoded
-
-
-class TrajectoryTokenProcessor(DataProcessor):
-    def __init__(
-        self, logdist_min=-2, logdist_max=6, logdist_steps=1000, bearing_steps=720
-    ):
-        super().__init__()
-        self.logdist_min = logdist_min
-        self.logdist_max = logdist_max
-        self.logdist_steps = logdist_steps
-        self.bearing_steps = bearing_steps
-        self.time_dim = 7
-
-        vocab_list = (
-            [PAD]
-            + [(BEARING, x) for x in range(bearing_steps)]
-            + [(DISTANCE, x) for x in range(logdist_steps)]
-            + [START]
-        )
-        self.vocab = bidict.frozenbidict(enumerate(vocab_list)).inv
-        assert self.vocab[PAD] == PAD_INDEX
-        self.vocab_size = len(self.vocab)
-
-    def encode(self, traj: Trajectory) -> Dict[str, np.ndarray]:
-        traj = quantize_trajectory(
-            traj,
-            logdist_min=self.logdist_min,
-            logdist_max=self.logdist_max,
-            logdist_steps=self.logdist_steps,
-            bearing_steps=self.bearing_steps,
-        )
-        traj = add_n_vectors(traj)
-
-        traj_len = _traj_len(traj)
-        features_len = 2 * (traj_len - 1)
-        encoded = {
-            "token": np.zeros((features_len + 1,), dtype=np.int_),
-            "time": np.zeros((features_len, 7), dtype=np.float32),
-            "dt": np.zeros((features_len, 1), dtype=np.float32),
-            "location": np.zeros((features_len, 3), dtype=np.float32),
-        }
-
-        encoded["token"][0] = self.vocab[START]
-        for i in range(traj_len - 1):
-            idx = 2 * i
-            encoded["token"][idx + 1] = self.vocab[(BEARING, traj["bearing_enc"][i])]
-            encoded["token"][idx + 2] = self.vocab[(DISTANCE, traj["distance_enc"][i])]
-            encoded["time"][idx : idx + 2] = _encode_datetime(traj["timestamp"][i])
-            encoded["dt"][idx : idx + 2, 0] = (
-                (traj["timestamp"][i + 1] - traj["timestamp"][i]).item()
-            ).total_seconds()
-
-        encoded["location"][0::2] = encoded["location"][1::2] = np.stack(
-            [traj["location_nx"], traj["location_ny"], traj["location_nz"]],
-            axis=1,
-        )[:-1]
-
         return encoded
 
 
