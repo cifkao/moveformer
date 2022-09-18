@@ -574,7 +574,7 @@ rasterio = "^1.2.10"
 type = "git"
 url = "https://github.com/cifkao/gps2var.git"
 reference = "main"
-resolved_reference = "70ee1d9b39ef9fda3b7c3d83f9acb0607657970f"
+resolved_reference = "b6b911bf91d0a4f9d63acfd1904b6bfb732bdf57"
 
 [[package]]
 name = "grpcio"
