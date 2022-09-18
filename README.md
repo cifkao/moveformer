@@ -95,5 +95,3 @@ python -m geo_transformers.models.any_horizon_forecast_transformer fit --config 
 [`sandbox/movebank+ungulates_12h_id2sampler.pickle`](./sandbox/movebank+ungulates_12h_id2sampler.pickle) contains a mapping from sequence IDs to `StepSampler` instances, which serve to sample candidate locations.
 
 To (re)estimate the samplers, run the [`sandbox/movebank+ungulates_12h_stats.ipynb`](./sandbox/movebank+ungulates_12h_stats.ipynb) notebook. It estimates the distributions of turning angles and log-distances for each taxon in the data, creates the corresponding `StepSampler` objects, and saves them by sequence ID.
-
-## Running the model
