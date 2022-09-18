@@ -48,7 +48,7 @@ First, download the following data:
   - [human footprint data](https://sedac.ciesin.columbia.edu/data/set/wildareas-v3-2009-human-footprint) (`wildareas-v3-2009-human-footprint-geotiff`)
   - [WorldClim bioclimatic variables](https://www.worldclim.org/data/worldclim21.html) ([`wc2.1_30s_bio.zip`](https://biogeo.ucdavis.edu/data/worldclim/v2.1/base/wc2.1_30s_bio.zip)) – 19 TIF files to be extracted inside `data/wc2.1_30s/`
   - [land cover data](https://doi.org/10.5281/zenodo.3939038) ([`PROBAV_LC100_global_v3.0.1_2015-base_Discrete-Classification-map_EPSG-4326.tif`](https://zenodo.org/record/3939038/files/PROBAV_LC100_global_v3.0.1_2015-base_Discrete-Classification-map_EPSG-4326.tif?download=1))
-- TODO: describe how to get the ungulates data 
+- **TODO:** describe how to get the ungulates data 
 
 Then run the notebooks in [`data/`](./data) in the following order:
 - [`movebank/download.ipynb`](./data/movebank/download.ipynb) downloads _all_ Movebank data available under a Creative Commons license. (Note that this was run on 15 Feb 2022 and will most likely produce more data today!)
@@ -58,12 +58,42 @@ Then run the notebooks in [`data/`](./data) in the following order:
 - [`movebank+ungulates/sample_12h.ipynb`](./data/movebank%2Bungulates/sample_12h.ipynb) subsamples the data with a period of approximately 12 h (noon, midnight).
 - [`geo/worldclim.ipynb`](./data/geo/worldclim.ipynb) processes the WorldClim bioclimatic variables.
 
-## Candidate samplers
+## Pretrained models
+
+We include all models used in our paper, each living in a directory under `exp/`:
+- VarCtx: `37ld98g9`
+- FullCtx: `vdv96ee1`
+- NoAtt: `2u6ajp2u`
+- NoEnc: `2rygu3l4`
+
+**TODO:** Describe how to get the checkpoints.
+
+## Training a model
+
+Before training a model, either set up [Weights and Biases](https://wandb.ai/) or disable it using `export WANDB_MODE=disabled`. Then run the `python -m geo_transformers.models.any_horizon_forecast_transformer fit` command with an appropriate configuration file.
+
+The commands to train the models from the paper are:
+```bash
+# VarCtx (37ld98g9)
+python -m geo_transformers.models.any_horizon_forecast_transformer fit --config config/forecast_mbk+ung_12h_sel_nofut.yaml --trainer.gpus=1 --trainer.logger=WandbLogger --trainer.logger.project=geo-transformers --trainer.logger.save_dir=exp/forecast_mbk+ung_12h
+```
+```bash
+# FullCtx (vdv96ee1)
+python -m geo_transformers.models.any_horizon_forecast_transformer fit --config config/forecast_mbk+ung_12h_sel_nofut.yaml --trainer.gpus=1 --trainer.logger=WandbLogger --trainer.logger.project=geo-transformers --trainer.logger.save_dir=exp/forecast_mbk+ung_12h --model.var_len_training_v2=False
+```
+```bash
+# NoAtt (2u6ajp2u)
+python -m geo_transformers.models.any_horizon_forecast_transformer fit --config config/forecast_mbk+ung_12h_sel_nofut_ctx1.yaml --trainer.gpus=1 --trainer.logger=WandbLogger --trainer.logger.project=geo-transformers --trainer.logger.save_dir=exp/forecast_mbk+ung_12h
+```
+```bash
+# NoEnc (2rygu3l4)
+python -m geo_transformers.models.any_horizon_forecast_transformer fit --config config/forecast_mbk+ung_12h_sel_nofut_ctx1.yaml --trainer.gpus=1 --trainer.logger=WandbLogger --trainer.logger.project=geo-transformers --trainer.logger.save_dir=exp/forecast_mbk+ung_12h --model.encoder.depth=0
+```
+
+### Candidate samplers
 
 [`sandbox/movebank+ungulates_12h_id2sampler.pickle`](./sandbox/movebank+ungulates_12h_id2sampler.pickle) contains a mapping from sequence IDs to `StepSampler` instances, which serve to sample candidate locations.
 
-To re-estimate the samplers, run the [`sandbox/movebank+ungulates_12h_stats.ipynb`](./sandbox/movebank+ungulates_12h_stats.ipynb) notebook. It estimates the distributions of turning angles and log-distances for each taxon in the data, creates the corresponding `StepSampler` objects, and saves them by sequence ID.
-
-## Training the model
+To (re)estimate the samplers, run the [`sandbox/movebank+ungulates_12h_stats.ipynb`](./sandbox/movebank+ungulates_12h_stats.ipynb) notebook. It estimates the distributions of turning angles and log-distances for each taxon in the data, creates the corresponding `StepSampler` objects, and saves them by sequence ID.
 
 ## Running the model
