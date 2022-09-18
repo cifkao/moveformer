@@ -36,7 +36,7 @@ kaleido = {version = "0.2.1", optional = true}
 black = "^22.1.0"
 
 [tool.poetry.extras]
-notebook = ["ipython", "ipykernel", "ipywidgets", "matplotlib", "seaborn", "plotly", "pandas", "nopdb", "Cartopy", "nltk", "dask", "pandarallel", "beautifulsoup4", "scikit-learn", "kaleido"]
+notebook = ["ipython", "ipykernel", "ipywidgets", "matplotlib", "seaborn", "plotly", "pandas", "nopdb", "dask", "pandarallel", "beautifulsoup4", "scikit-learn", "kaleido"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0", "setuptools>=59.5.0,<59.6.0"]
