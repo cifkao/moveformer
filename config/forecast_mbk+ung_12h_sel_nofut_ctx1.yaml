@@ -1,0 +1,170 @@
+seed_everything: 42
+model:
+  cont_feat_dims:
+    location: 3
+    location_mov: 2
+    location_cand: 3
+    location_cand_mov: 2
+    time_cont: 10
+    time_cont_tgt: 10
+    time_lmt: 2
+    time_lmt_tgt: 2
+    dtime_cont: 12
+    humfoot: 1
+    humfoot_tgt: 1
+    humfoot_cand: 1
+    bioclim: &bioclim_dim 19
+    bioclim_tgt: *bioclim_dim
+    bioclim_cand: *bioclim_dim
+    taxon: 100
+  disc_feat_dims:
+    time_month: 12
+    time_month_tgt: 12
+    time_day: 31
+    time_day_tgt: 31
+    time_weekday: 7
+    time_weekday_tgt: 7
+    landcover: &landcover_dim 201
+    landcover_tgt: *landcover_dim
+    landcover_cand: *landcover_dim
+  keys_in:
+    - taxon
+    - location
+    - location_mov
+    - time_month
+    - time_day
+    - time_weekday
+    - time_cont
+    - time_lmt
+    - humfoot
+    - bioclim
+    - landcover
+    - time_month_tgt
+    - time_day_tgt
+    - time_weekday_tgt
+    - time_cont_tgt
+    - time_lmt_tgt
+    - dtime_cont
+  emb_dim: 128
+  encoder:
+    class_path: x_transformers.x_transformers.AttentionLayers
+    init_args:
+      dim: 128
+      depth: 6
+      heads: 8
+      no_attn: True
+  prediction_head:
+    class_path: SelectionHead
+    init_args:
+      in_features: 128
+      hidden_features: 128
+      embedding_in_keys:
+        - location_cand
+        - location_cand_mov
+        - humfoot_cand
+        - bioclim_cand
+        - landcover_cand
+      candidate_encoder_layers:
+        - class_path: torch.nn.Linear
+          init_args:
+            in_features: 256
+            out_features: 256
+        - class_path: torch.nn.GELU
+        - class_path: torch.nn.Linear
+          init_args:
+            in_features: 256
+            out_features: 128
+  max_len: &len 500
+  learnable_nan: True
+optimizer:
+  lr: 5.0e-5
+lr_warmup:
+  warmup_steps: 1000
+lr_decay:
+  step_size: 1
+  gamma: 0.98
+  verbose: True
+trainer:
+  max_epochs: 180
+  val_check_interval: 0.5
+  callbacks:
+    - class_path: pytorch_lightning.callbacks.LearningRateMonitor
+      init_args:
+        logging_interval: epoch
+    - class_path: pytorch_lightning.callbacks.ModelCheckpoint
+      init_args: {}
+    - class_path: pytorch_lightning.callbacks.ModelCheckpoint
+      init_args:
+        monitor: "val/loss"
+        filename: "{epoch}-{step}-best"
+data:
+  data_path: "data/movebank+ungulates/locations_12h/"
+  processor:
+    class_path: geo_transformers.trajectory.SimpleTrajectoryProcessor
+    init_args:
+      use_target: True
+      use_candidates: True
+      add_dtime: True
+      add_mov_vec: True
+      mov_vec_scale: 2.8799098626533034e-05  # 1 / RMSD computed on train
+      handle_nan: False
+      pass_through: ["taxon", "humfoot", "bioclim", "landcover"]
+  geo_var_readers:
+    humfoot:
+      class_path: geo_transformers.training_utils.RasterValueReaderPool
+      init_args:
+        spec:
+          path: "data/geo/wildareas-v3-2009-human-footprint-geotiff/wildareas-v3-2009-human-footprint.tif"
+          feat_center: 0
+          feat_scale: 0.02
+          interpolation: bilinear
+        num_workers: 8
+    bioclim:
+      class_path: geo_transformers.datasets.WorldClimBioReader
+      init_args:
+        root_path: "data/geo/wc2.1_30s_reformat/"
+        interpolation: nearest
+        num_workers: 1
+    landcover:
+      class_path: geo_transformers.training_utils.RasterValueReaderPool
+      init_args:
+        spec:
+          path: "data/geo/PROBAV_LC100_global_v3.0.1_2015-base_Discrete-Classification-map_EPSG-4326.tif"
+          feat_dtype: "uint8"
+          fill_value: 0
+        num_workers: 8
+  var_joins:
+    individual_id:
+      taxon: "data/movebank+ungulates/individual2taxon_emb.pickle"
+  train_dataloader:
+    batch_size: 24
+    num_workers: 8
+  infer_dataloader:
+    batch_size: 32
+    num_workers: 8
+  train:
+    id_column: &idcol seq_id
+    split_min_len: &minlen 2
+    split_max_len: *len
+    encoded_max_len: *len
+    target_max_skip: &tskip 1
+    num_candidates: &ncand 16
+    candidate_sampler_path: &cspath "sandbox/movebank+ungulates_12h_id2sampler.pickle"
+  val:
+    id_column: *idcol
+    split_min_len: *minlen
+    split_max_len: *len
+    encoded_max_len: *len
+    target_max_skip: *tskip
+    num_candidates: *ncand
+    candidate_sampler_path: *cspath
+    deterministic: True
+  test:
+    id_column: *idcol
+    split_min_len: *minlen
+    split_max_len: *len
+    encoded_max_len: *len
+    target_max_skip: *tskip
+    num_candidates: *ncand
+    candidate_sampler_path: *cspath
+    deterministic: True
