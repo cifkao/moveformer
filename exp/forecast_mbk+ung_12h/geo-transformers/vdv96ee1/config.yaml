@@ -1,0 +1,416 @@
+wandb_version: 1
+
+_wandb:
+  desc: null
+  value:
+    cli_version: 0.12.14
+    framework: lightning
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    m:
+    - 1: trainer/global_step
+      6:
+      - 3
+    python_version: 3.9.7
+    start_time: 1657185983
+    t:
+      1:
+      - 1
+      - 9
+      - 55
+      3:
+      - 4
+      - 7
+      - 16
+      - 23
+      4: 3.9.7
+      5: 0.12.14
+      8:
+      - 5
+config:
+  desc: null
+  value: null
+fit:
+  desc: null
+  value:
+    ckpt_path: null
+    config:
+    - config/forecast_mbk+ung_12h_sel_nofut.yaml
+    data:
+      data_path: data/movebank+ungulates/locations_12h/
+      dims: null
+      geo_var_readers:
+        bioclim:
+          class_path: geo_transformers.datasets.WorldClimBioReader
+          init_args:
+            interpolation: nearest
+            num_threads: null
+            num_workers: 1
+            root_path: data/geo/wc2.1_30s_reformat/
+            use_multiprocessing: true
+            var_ids: null
+        humfoot:
+          class_path: geo_transformers.training_utils.RasterValueReaderPool
+          init_args:
+            num_threads: null
+            num_workers: 8
+            spec:
+              feat_center: 0
+              feat_scale: 0.02
+              interpolation: bilinear
+              path: data/geo/wildareas-v3-2009-human-footprint-geotiff/wildareas-v3-2009-human-footprint.tif
+            use_multiprocessing: false
+        landcover:
+          class_path: geo_transformers.training_utils.RasterValueReaderPool
+          init_args:
+            num_threads: null
+            num_workers: 8
+            spec:
+              feat_dtype: uint8
+              fill_value: 0
+              path: data/geo/PROBAV_LC100_global_v3.0.1_2015-base_Discrete-Classification-map_EPSG-4326.tif
+            use_multiprocessing: false
+      infer_dataloader:
+        batch_size: 32
+        drop_last: false
+        num_workers: 8
+        persistent_workers: false
+        pin_memory: false
+        prefetch_factor: 2
+        sampler: null
+        shuffle: false
+        timeout: 0.0
+        worker_init_fn: null
+      processor:
+        class_path: geo_transformers.trajectory.SimpleTrajectoryProcessor
+        init_args:
+          add_dtime: true
+          add_mov_vec: true
+          handle_nan: false
+          mov_vec_scale: 2.8799098626533034e-05
+          pass_through:
+          - taxon
+          - humfoot
+          - bioclim
+          - landcover
+          use_candidates: true
+          use_target: true
+      test:
+        candidate_sampler_path: sandbox/movebank+ungulates_12h_id2sampler.pickle
+        deterministic: true
+        drop_prob: 0.0
+        encoded_max_len: 500
+        id_column: seq_id
+        num_candidates: 16
+        split_max_len: 500
+        split_min_len: 2
+        target_max_skip: 1
+      test_transforms: null
+      train:
+        candidate_sampler_path: sandbox/movebank+ungulates_12h_id2sampler.pickle
+        deterministic: false
+        drop_prob: 0.0
+        encoded_max_len: 500
+        id_column: seq_id
+        num_candidates: 16
+        split_max_len: 500
+        split_min_len: 2
+        target_max_skip: 1
+      train_dataloader:
+        batch_size: 24
+        drop_last: false
+        num_workers: 8
+        persistent_workers: false
+        pin_memory: false
+        prefetch_factor: 2
+        sampler: null
+        shuffle: true
+        timeout: 0.0
+        worker_init_fn: null
+      train_transforms: null
+      val:
+        candidate_sampler_path: sandbox/movebank+ungulates_12h_id2sampler.pickle
+        deterministic: true
+        drop_prob: 0.0
+        encoded_max_len: 500
+        id_column: seq_id
+        num_candidates: 16
+        split_max_len: 500
+        split_min_len: 2
+        target_max_skip: 1
+      val_transforms: null
+      var_joins:
+        individual_id:
+          taxon: data/movebank+ungulates/individual2taxon_emb.pickle
+    lr_decay:
+      gamma: 0.98
+      last_epoch: -1
+      step_size: 1
+      verbose: true
+    lr_warmup:
+      last_epoch: -1
+      verbose: false
+      warmup_steps: 1000
+    model:
+      concat_enc_to_out: false
+      cont_feat_dims:
+        bioclim: 19
+        bioclim_cand: 19
+        bioclim_tgt: 19
+        dtime_cont: 12
+        humfoot: 1
+        humfoot_cand: 1
+        humfoot_tgt: 1
+        location: 3
+        location_cand: 3
+        location_cand_mov: 2
+        location_mov: 2
+        taxon: 100
+        time_cont: 10
+        time_cont_tgt: 10
+        time_lmt: 2
+        time_lmt_tgt: 2
+      decoder: null
+      disc_feat_dims:
+        landcover: 201
+        landcover_cand: 201
+        landcover_tgt: 201
+        time_day: 31
+        time_day_tgt: 31
+        time_month: 12
+        time_month_tgt: 12
+        time_weekday: 7
+        time_weekday_tgt: 7
+      emb_dim: 128
+      encoder:
+        class_path: x_transformers.x_transformers.AttentionLayers
+        init_args:
+          alibi_learned: false
+          alibi_num_heads: null
+          alibi_pos_bias: false
+          causal: true
+          cross_attend: false
+          cross_causal: false
+          cross_residual_attn: false
+          custom_layers: null
+          depth: 6
+          dim: 128
+          dynamic_pos_bias: false
+          dynamic_pos_bias_log_distance: false
+          dynamic_pos_bias_mlp_depth: 2
+          dynamic_pos_bias_norm: false
+          gate_residual: false
+          heads: 8
+          macaron: false
+          only_cross: false
+          par_ratio: null
+          position_infused_attn: false
+          pre_norm: true
+          qk_norm_attn_seq_len: null
+          rel_pos_bias: false
+          rel_pos_max_distance: 128
+          rel_pos_num_buckets: 32
+          residual_attn: false
+          rotary_emb_dim: null
+          rotary_pos_emb: false
+          sandwich_coef: null
+          sandwich_norm: false
+          scale_residual: false
+          scale_residual_constant: 1.0
+          shift_tokens: 0
+          use_qk_norm_attn: false
+          use_rezero: false
+          use_rmsnorm: false
+          use_scalenorm: false
+          zero_init_branch_output: false
+      keys_future: null
+      keys_in:
+      - taxon
+      - location
+      - location_mov
+      - time_month
+      - time_day
+      - time_weekday
+      - time_cont
+      - time_lmt
+      - humfoot
+      - bioclim
+      - landcover
+      - time_month_tgt
+      - time_day_tgt
+      - time_weekday_tgt
+      - time_cont_tgt
+      - time_lmt_tgt
+      - dtime_cont
+      learnable_nan: true
+      lr_decay_init:
+        class_path: torch.optim.lr_scheduler.StepLR
+        init_args:
+          gamma: 0.98
+          last_epoch: -1
+          step_size: 1
+          verbose: true
+      lr_warmup_init:
+        class_path: geo_transformers.training_utils.LinearWarmupLR
+        init_args:
+          last_epoch: -1
+          verbose: false
+          warmup_steps: 1000
+      max_len: 500
+      optimizer_init:
+        class_path: torch.optim.adam.Adam
+        init_args:
+          amsgrad: false
+          betas:
+          - 0.9
+          - 0.999
+          eps: 1.0e-08
+          lr: 5.0e-05
+          weight_decay: 0
+      prediction_head:
+        class_path: __main__.SelectionHead
+        init_args:
+          candidate_encoder_layers:
+          - class_path: torch.nn.Linear
+            init_args:
+              bias: true
+              device: null
+              dtype: null
+              in_features: 256
+              out_features: 256
+          - class_path: torch.nn.GELU
+          - class_path: torch.nn.Linear
+            init_args:
+              bias: true
+              device: null
+              dtype: null
+              in_features: 256
+              out_features: 128
+          embedding_in_keys:
+          - location_cand
+          - location_cand_mov
+          - humfoot_cand
+          - bioclim_cand
+          - landcover_cand
+          hidden_features: 128
+          in_features: 128
+      var_len_training: false
+    optimizer:
+      amsgrad: false
+      betas:
+      - 0.9
+      - 0.999
+      eps: 1.0e-08
+      lr: 5.0e-05
+      weight_decay: 0
+    seed_everything: 42
+    trainer:
+      accelerator: null
+      accumulate_grad_batches: null
+      amp_backend: native
+      amp_level: null
+      auto_lr_find: false
+      auto_scale_batch_size: false
+      auto_select_gpus: false
+      benchmark: null
+      callbacks:
+      - class_path: pytorch_lightning.callbacks.LearningRateMonitor
+        init_args:
+          log_momentum: false
+          logging_interval: epoch
+      - class_path: pytorch_lightning.callbacks.ModelCheckpoint
+        init_args:
+          auto_insert_metric_name: true
+          dirpath: null
+          every_n_epochs: null
+          every_n_train_steps: null
+          filename: null
+          mode: min
+          monitor: null
+          save_last: null
+          save_on_train_epoch_end: null
+          save_top_k: 1
+          save_weights_only: false
+          train_time_interval: null
+          verbose: false
+      - class_path: pytorch_lightning.callbacks.ModelCheckpoint
+        init_args:
+          auto_insert_metric_name: true
+          dirpath: null
+          every_n_epochs: null
+          every_n_train_steps: null
+          filename: '{epoch}-{step}-best'
+          mode: min
+          monitor: val/loss
+          save_last: null
+          save_on_train_epoch_end: null
+          save_top_k: 1
+          save_weights_only: false
+          train_time_interval: null
+          verbose: false
+      check_val_every_n_epoch: 1
+      checkpoint_callback: null
+      default_root_dir: null
+      detect_anomaly: false
+      deterministic: false
+      devices: null
+      enable_checkpointing: true
+      enable_model_summary: true
+      enable_progress_bar: true
+      fast_dev_run: false
+      flush_logs_every_n_steps: null
+      gpus: 1
+      gradient_clip_algorithm: null
+      gradient_clip_val: null
+      ipus: null
+      limit_predict_batches: null
+      limit_test_batches: null
+      limit_train_batches: null
+      limit_val_batches: null
+      log_every_n_steps: 50
+      log_gpu_memory: null
+      logger:
+        class_path: pytorch_lightning.loggers.WandbLogger
+        init_args:
+          anonymous: null
+          experiment: null
+          id: null
+          log_model: false
+          name: null
+          offline: false
+          prefix: ''
+          project: geo-transformers
+          save_dir: exp/forecast_mbk+ung_12h
+          version: null
+      max_epochs: 180
+      max_steps: -1
+      max_time: null
+      min_epochs: null
+      min_steps: null
+      move_metrics_to_cpu: false
+      multiple_trainloader_mode: max_size_cycle
+      num_nodes: 1
+      num_processes: null
+      num_sanity_val_steps: 2
+      overfit_batches: 0.0
+      plugins: null
+      precision: 32
+      prepare_data_per_node: null
+      process_position: 0
+      profiler: null
+      progress_bar_refresh_rate: null
+      reload_dataloaders_every_n_epochs: 0
+      replace_sampler_ddp: true
+      resume_from_checkpoint: null
+      stochastic_weight_avg: false
+      strategy: null
+      sync_batchnorm: false
+      terminate_on_nan: null
+      tpu_cores: null
+      track_grad_norm: -1
+      val_check_interval: 0.5
+      weights_save_path: null
+      weights_summary: top
+subcommand:
+  desc: null
+  value: fit
