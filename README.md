@@ -1,5 +1,10 @@
 # MoveFormer
 
+The repository contains the following:
+- `geo_transformers` – the main Python package
+- `data` – data preparation Jupyter notebooks
+- `sandbox` – other Jupyter notebooks (mainly with results)
+
 ## Installation
 
 First, install [GDAL](https://gdal.org/) according to the [instructions](https://gdal.org/download.html#binaries) appropriate for your system (e.g. `apt install gdal-bin libgdal-dev`, `conda install -c conda-forge gdal`, ...). Then proceed either with Pip or Poetry as follows.
