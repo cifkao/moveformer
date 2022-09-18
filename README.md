@@ -9,7 +9,7 @@ The repository contains the following:
 
 ## Installation
 
-First, install [GDAL](https://gdal.org/) according to the [instructions](https://gdal.org/download.html#binaries) appropriate for your system (e.g. `apt install gdal-bin libgdal-dev`, `conda install -c conda-forge gdal`, ...). Then proceed either with Pip or Poetry as follows.
+First, install [GDAL](https://gdal.org/) according to the [instructions](https://gdal.org/download.html#binaries) appropriate for your system (e.g. `apt install gdal-bin libgdal-dev`, `conda install -c conda-forge gdal`, ...). Then proceed with **either Pip or Poetry** as follows.
 
 ### Pip
 Make sure you have Python 3.9, `pip>=21.2`, and `setuptools==59.5.0` (run `pip install -U pip 'setuptools==59.5.0'`). Then:
