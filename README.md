@@ -9,6 +9,8 @@ The repository contains the following:
 - `data` – data preparation Jupyter notebooks
 - `sandbox` – other Jupyter notebooks (mainly to compute results)
 
+See also [`gps2var`](https://github.com/cifkao/gps2var), a package for fast loading of geospatial variables by GPS coordinates, also developed as part of this project.
+
 ## Installation
 
 First, install [GDAL](https://gdal.org/) according to the [instructions](https://gdal.org/download.html#binaries) appropriate for your system (e.g. `apt install gdal-bin libgdal-dev`, `conda install -c conda-forge gdal`, ...). Then proceed with **either Pip or Poetry** as follows.
@@ -109,3 +111,8 @@ The code for running the models on the test data and computing results is contai
 - [`mbk+ung_12h_feat_imp.ipynb`](./sandbox/mbk+ung_12h_feat_imp.ipynb) – candidate feature importance
 
 Pre-computed metrics are provided so that the analyses can be replicated without running the models.
+
+## Acknowledgments
+This work was supported by the LabEx NUMEV (ANR-10-LABX-0020) and the REPOS project, both funded by the I-Site MUSE (ANR-16-IDEX-0006). Computations were performed using HPC/AI resources from GENCI-IDRIS (Grant AD011012019R1).
+
+We would like to thank all authors who made their data available through MoveBank under Creative Commons licenses.
