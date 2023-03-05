@@ -1,5 +1,7 @@
 # MoveFormer
 
+This repository accompanies the paper *MoveFormer: a Transformer-based model for step-selection animal movement modelling*.
+
 The repository contains the following:
 - `geo_transformers` – the main Python package
 - `config` – training configuration files
@@ -46,7 +48,7 @@ The following data is required for both training and inference:
 - 100d [Wikipedia2Vec embeddings](https://wikipedia2vec.github.io/wikipedia2vec/pretrained/) in binary format ([`enwiki_20180420_100d.pkl.bz2`](http://wikipedia2vec.s3.amazonaws.com/models/en/2018-04-20/enwiki_20180420_100d.pkl.bz2)), to be placed in `data/`
 - geospatial raster data, to be placed in `data/geo/`:
   - [human footprint data](https://sedac.ciesin.columbia.edu/data/set/wildareas-v3-2009-human-footprint) (`wildareas-v3-2009-human-footprint-geotiff`)
-  - [WorldClim bioclimatic variables](https://www.worldclim.org/data/worldclim21.html) ([`wc2.1_30s_bio.zip`](https://biogeo.ucdavis.edu/data/worldclim/v2.1/base/wc2.1_30s_bio.zip)) – 19 TIF files to be extracted inside `data/wc2.1_30s/`
+  - [WorldClim bioclimatic variables](https://www.worldclim.org/data/worldclim21.html) ([`wc2.1_30s_bio.zip`](https://biogeo.ucdavis.edu/data/worldclim/v2.1/base/wc2.1_30s_bio.zip)) – 19 TIF files to be extracted inside `data/geo/wc2.1_30s/`
   - [land cover data](https://doi.org/10.5281/zenodo.3939038) ([`PROBAV_LC100_global_v3.0.1_2015-base_Discrete-Classification-map_EPSG-4326.tif`](https://zenodo.org/record/3939038/files/PROBAV_LC100_global_v3.0.1_2015-base_Discrete-Classification-map_EPSG-4326.tif?download=1))
 
 The notebooks in [`data/`](./data) show how the training data was acquired and pre-processed. The notebooks in [`ungulates/`](./ungulates) can be used as an example of how to pre-process custom (non-Movebank) data.
