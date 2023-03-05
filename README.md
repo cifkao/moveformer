@@ -115,4 +115,4 @@ Pre-computed metrics are provided so that the analyses can be replicated without
 ## Acknowledgments
 This work was supported by the LabEx NUMEV (ANR-10-LABX-0020) and the REPOS project, both funded by the I-Site MUSE (ANR-16-IDEX-0006). Computations were performed using HPC/AI resources from GENCI-IDRIS (Grant AD011012019R1).
 
-We would like to thank all authors who made their data available through MoveBank under Creative Commons licenses.
+We would like to thank all authors who made their data available through Movebank under Creative Commons licenses.
