@@ -71,7 +71,7 @@ We include all models used in our paper, each living in a directory under `exp/`
 
 To get the model weights, download the `checkpoints.zip` archive [from Zenodo](https://doi.org/10.5281/zenodo.7698263) and extract it in the root of the repository. On Linux:
 ```bash
-wget https://zenodo.org/api/files/044a9795-9368-4e33-a15f-8b08a17b1f44/checkpoints.zip
+wget https://zenodo.org/record/7698263/files/checkpoints.zip
 unzip checkpoints.zip
 ```
 
