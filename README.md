@@ -53,7 +53,7 @@ The following data is required for both training and inference:
   - [WorldClim bioclimatic variables](https://www.worldclim.org/data/worldclim21.html) ([`wc2.1_30s_bio.zip`](https://biogeo.ucdavis.edu/data/worldclim/v2.1/base/wc2.1_30s_bio.zip)) – 19 TIF files to be extracted inside `data/geo/wc2.1_30s/`
   - [land cover data](https://doi.org/10.5281/zenodo.3939038) ([`PROBAV_LC100_global_v3.0.1_2015-base_Discrete-Classification-map_EPSG-4326.tif`](https://zenodo.org/record/3939038/files/PROBAV_LC100_global_v3.0.1_2015-base_Discrete-Classification-map_EPSG-4326.tif?download=1))
 
-The notebooks in [`data/`](./data) show how the training data was acquired and pre-processed. The notebooks in [`ungulates/`](./ungulates) can be used as an example of how to pre-process custom (non-Movebank) data.
+The notebooks in [`data/`](./data) show how the training data was acquired and pre-processed. The notebooks in [`ungulates/`](./data/ungulates) can be used as an example of how to pre-process custom (non-Movebank) data.
 - [`movebank/download.ipynb`](./data/movebank/download.ipynb) downloads _all_ Movebank data available under a Creative Commons license. (Note that this was run on 15 Feb 2022 and will most likely produce more data today!)
 - [`movebank/to_parquet.ipynb`](./data/movebank/to_parquet.ipynb) and [`ungulates/to_parquet.ipynb`](./data/ungulates/to_parquet.ipynb) read the CSV data and save it as Parquet tables.
 - [`movebank/individual_vars.ipynb`](./data/movebank/individual_vars.ipynb) and [`ungulates/individual_vars.ipynb`](./data/ungulates/individual_vars.ipynb) create a mapping from individuals to Wikipedia2Vec taxon embeddings.
