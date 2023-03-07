@@ -1,6 +1,6 @@
 # MoveFormer
 
-This repository accompanies the paper [*MoveFormer: a Transformer-based model for step-selection animal movement modelling*](https://www.biorxiv.org/content/10.1101/2023.03.05.531080v1).
+This repository accompanies the paper [*MoveFormer: a Transformer-based model for step-selection animal movement modelling*](https://www.biorxiv.org/content/10.1101/2023.03.05.531080v1) by Ondřej Cífka, Simon Chamaillé-Jammes, and Antoine Liutkus.
 
 The repository contains the following:
 - `geo_transformers` – the main Python package
